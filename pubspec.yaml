@@ -1,7 +1,6 @@
 name: slide_digital_clock
 description: Digital Clock for Flutter
 version: 1.0.2
-author: Çağlar YILMAZ <caglarsibel.ylmz@gmail.com>
 homepage: https://github.com/caglarylmz/slide_digital_clock
 
 environment:
@@ -10,9 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ntp: ^2.0.0
+  timezone: ^0.8.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
     
 flutter:
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - lib/assets/timezones/2021.tzf

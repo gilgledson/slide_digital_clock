@@ -1,24 +1,27 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:timezone/timezone.dart';
 
 import 'helpers/clock_model.dart';
 import 'helpers/spinner_text.dart';
+import 'package:timezone/standalone.dart' as tz;
 
 class DigitalClock extends StatefulWidget {
-  DigitalClock({
-    this.is24HourTimeFormat,
-    this.showSecondsDigit,
-    this.areaWidth,
-    this.areaHeight,
-    this.areaDecoration,
-    this.areaAligment,
-    this.hourMinuteDigitDecoration,
-    this.secondDigitDecoration,
-    this.digitAnimationStyle,
-    this.hourMinuteDigitTextStyle,
-    this.secondDigitTextStyle,
-    this.amPmDigitTextStyle,
-  });
+  DigitalClock(
+      {this.is24HourTimeFormat,
+      this.showSecondsDigit,
+      this.areaWidth,
+      this.areaHeight,
+      this.areaDecoration,
+      this.areaAligment,
+      this.hourMinuteDigitDecoration,
+      this.secondDigitDecoration,
+      this.digitAnimationStyle,
+      this.hourMinuteDigitTextStyle,
+      this.secondDigitTextStyle,
+      this.amPmDigitTextStyle,
+      required this.timeLocation});
 
   final bool? is24HourTimeFormat;
   final bool? showSecondsDigit;
@@ -32,7 +35,7 @@ class DigitalClock extends StatefulWidget {
   final TextStyle? hourMinuteDigitTextStyle;
   final TextStyle? secondDigitTextStyle;
   final TextStyle? amPmDigitTextStyle;
-
+  final Location timeLocation;
   @override
   _DigitalClockState createState() => _DigitalClockState();
 }
@@ -41,21 +44,22 @@ class _DigitalClockState extends State<DigitalClock> {
   late DateTime _dateTime;
   late ClockModel _clockModel;
   late Timer _timer;
-
+  int offset = 0;
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
+    _dateTime = tz.TZDateTime.from(DateTime.now(), widget.timeLocation);
+
     _clockModel = ClockModel();
     _clockModel.is24HourFormat = widget.is24HourTimeFormat ?? true;
 
-    _dateTime = DateTime.now();
+    _dateTime = tz.TZDateTime.from(DateTime.now(), widget.timeLocation);
     _clockModel.hour = _dateTime.hour;
     _clockModel.minute = _dateTime.minute;
     _clockModel.second = _dateTime.second;
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      _dateTime = DateTime.now();
+      _dateTime = tz.TZDateTime.from(DateTime.now(), widget.timeLocation);
       _clockModel.hour = _dateTime.hour;
       _clockModel.minute = _dateTime.minute;
       _clockModel.second = _dateTime.second;
